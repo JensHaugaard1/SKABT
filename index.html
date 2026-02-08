@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="https://use.typekit.net/xbq0rrx.css">
+  <title>ZINE</title>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #000000;
+      overflow: hidden;
+      font-family: "indivisible", sans-serif;
+        font-weight: 400;
+    font-style: normal;
+      }
+
+    canvas{
+      position: fixed;
+      inset: 0;
+      z-index: 49;
+      pointer-events: auto;
+      background: transparent;
+      transition: scale .25s ease-in-out;;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .text{
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      max-width: 45ch;
+      z-index: 50;
+      color: #fff;
+      font-size: .875rem;
+      line-height: .875rem;
+      text-align: right;
+    }
+
+   /* --- desktop layout --- */
+.logo,
+.logo2{
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  pointer-events: none;
+  width: 20vw;              /* defines each "column" */
+  display: flex;
+  align-items: center;      /* keeps image vertically aligned inside column */
+}
+
+.logo{
+  left: 20px;
+  justify-content: flex-start;  /* left aligned inside left column */
+}
+
+.logo2{
+  right: 20px;
+  justify-content: flex-end;    /* right aligned inside right column */
+}
+
+.logo img,
+.logo2 img{
+  height: 18vh;     /* identical height */
+  width: auto;
+  display: block;
+}
+
+
+@media screen and (max-width: 800px) {
+
+  .logo,
+  .logo2{
+    position: fixed;
+    top: 0;
+    transform: none;
+    width: 50vw;        /* split top into two halves */
+    height: auto;
+    padding: 15px;
+  }
+
+  .logo{
+    left: 0;
+    justify-content: flex-start;
+  }
+
+  .logo2{
+    right: 0;
+    justify-content: flex-end;
+  }
+
+  .logo img,
+  .logo2 img{
+    height: 8vh;   /* smaller for mobile */
+  }
+}
+
+
+    .links{
+      position: fixed;
+      Left: 24px;
+      bottom: 24px;
+      z-index: 50;
+      display: flex;
+      gap: 24px;
+      font-size: .875rem;
+    }
+
+    .links a,
+.links a:visited {
+  position: relative;
+  color: #fff !important;
+  text-decoration: none !important;
+  z-index: 0;
+  display: inline-block; /* important for ::after sizing */
+}
+
+/* filled box */
+.links a::after {
+  content: "";
+  position: absolute;
+  inset: 1px -1.5px;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+
+  transition:
+    opacity 0.12s ease,
+    transform 0.25s cubic-bezier(0, -0.03, 0.28, 1);
+}
+
+/* hover / focus */
+.links a:hover::after,
+.links a:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media screen and (max-width: 800px) { 
+
+     .links {
+        font-size: 0.75rem;
+     }
+
+     .text {
+            font-size: 0.75rem;
+            line-height: 0.75rem;
+            max-width: 50vw;
+        }
+
+    canvas {
+        scale: 75%;
+        transition: scale .25s ease-in-out;;
+    }
+
+    
+    }
+
+.stocklist-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.96);
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+.stocklist-overlay.active{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ESC link styled exactly like your nav links */
+.overlay-esc{
+  position: fixed;
+      Left: 24px;
+      bottom: 24px;
+      z-index: 50;
+      display: flex;
+      gap: 24px;
+      font-size: .875rem;
+}
+
+/* reuse your link styling */
+.overlay-esc,
+.overlay-esc:visited{
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: .875rem;
+  position: relative;
+  display: inline-block;
+      position: absolute !important;
+}
+
+/* same hover fill effect */
+.overlay-esc::after{
+  content: "";
+  position: absolute;
+  inset: 1px -1.5px;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+
+  transition:
+    opacity 0.12s ease,
+    transform 0.25s cubic-bezier(0, -0.03, 0.28, 1);
+}
+
+.overlay-esc:hover::after,
+.overlay-esc:focus-visible::after{
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.stocklist-content{
+  max-width: 600px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #fff;
+}
+
+
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div class="logo">
+    <img src="./Asset 2.svg" alt="Logo">
+  </div>
+
+  <div class="logo2">
+    <img src="./Asset 1.svg" alt="Logo">
+  </div>
+
+  <div class="text">
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at neque velit. Fusce magna felis, faucibus auctor quam ac, egestas iaculis ipsum. Vivamus consectetur tempus lacus sed 
+</p>
+
+  </div>
+
+  <nav class="links">
+    <a href="#" id="openStocklist">STOCKLIST</a>
+    <a href="#">OM</a>
+  </nav>
+
+  <div class="stocklist-overlay" id="stocklistOverlay" aria-hidden="true">
+  
+  <a href="#" class="overlay-esc" id="closeStocklist">ESC</a>
+
+  <div class="stocklist-content">
+    <p>Lorem ipsum dolor sit amet</p>
+    <p>Consectetur adipiscing elit</p>
+    <p>Vivamus luctus urna sed urna</p>
+    <p>Ultricies ac tempor dui sagittis</p>
+    <p>In condimentum facilisis porta</p>
+    <p>Sed nec diam eu diam mattis viverra</p>
+    <p>Nulla fringilla, orci ac euismod semper</p>
+  </div>
+</div>
+
+
+
+  <script type="module">
+    import * as THREE from "three";
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+    const scene = new THREE.Scene(); // transparent (no background)
+    const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 1000);
+    const material = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0.5 });
+    camera.position.set(0, 0, 3);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.AcesFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
+    document.body.appendChild(renderer.domElement);
+    
+
+
+    // Soft environment lighting
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+    scene.add(new THREE.AmbientLight(0xffffff, 1));
+
+
+    // Load model
+    const loader = new GLTFLoader();
+    let model = null;
+
+    loader.load("./ZINE.glb", (gltf) => {
+      model = gltf.scene;
+      scene.add(model);
+
+      // Center
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      model.position.sub(center);
+
+
+      // Scale
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      model.scale.setScalar(1.6 / maxDim);
+
+      // Fix shading / gaps
+      model.traverse((obj) => {
+  if (!obj.isMesh) return;
+
+  const geo = obj.geometry;
+  if (!geo.attributes.normal) geo.computeVertexNormals();
+
+  const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+  mats.forEach((m) => {
+    m.side = THREE.DoubleSide;
+
+    m.dithering = true;        
+    m.needsUpdate = true;
+  });
+});
+
+    }, undefined, (err) => console.error("GLB load error:", err));
+
+    // Rotation (Z only) with inertia + easing
+    let rotZ = 0;        // current (rendered)
+    let targetRotZ = 0;  // target
+    let velZ = 0;        // inertial velocity
+
+    const AUTO = 0.0015;     // idle spin
+    const DRAG_SENS = 0.012; // drag sensitivity
+    const FOLLOW = 0.12;     // easing toward target
+    const FRICTION = 0.92;   // ease-out after release
+
+    addEventListener("wheel", (e) => {
+      targetRotZ += e.deltaY * 0.002;
+    }, { passive: true });
+
+    let dragging = false;
+    let lastX = 0;
+
+    addEventListener("pointerdown", (e) => {
+      dragging = true;
+      lastX = e.clientX;
+      velZ = 0;
+
+      addEventListener("pointermove", onMove);
+      addEventListener("pointerup", onUp, { once: true });
+    });
+
+    function onMove(e) {
+      if (!dragging) return;
+      const dx = e.clientX - lastX;
+      lastX = e.clientX;
+
+      const delta = dx * DRAG_SENS;
+      targetRotZ += delta;
+      velZ = delta;
+    }
+
+    function onUp() {
+      dragging = false;
+      removeEventListener("pointermove", onMove);
+    }
+
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      targetRotZ += AUTO;
+
+      if (!dragging) {
+        velZ *= FRICTION;
+        targetRotZ += velZ;
+      }
+
+      rotZ += (targetRotZ - rotZ) * FOLLOW;
+
+      if (model) model.rotation.y = rotZ;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+
+    const overlay = document.getElementById("stocklistOverlay");
+const openBtn = document.getElementById("openStocklist");
+const closeBtn = document.getElementById("closeStocklist");
+
+openBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  overlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+});
+
+function closeOverlay(e){
+  if (e) e.preventDefault();
+  overlay.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+closeBtn.addEventListener("click", closeOverlay);
+
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeOverlay();
+});
+
+  </script>
+</body>
+</html>
