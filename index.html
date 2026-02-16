@@ -46,8 +46,7 @@
 .logo,
 .logo2{
   position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 20px;
   z-index: 10;
   pointer-events: none;
   width: 20vw;              /* defines each "column" */
@@ -303,22 +302,32 @@
     const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 1000);
     const material = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0.5 });
     camera.position.set(0, 0, 3);
+    THREE.ColorManagement.enabled = false;
+   
+
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.AcesFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
+
+    renderer.outputColorSpace = THREE.SRGBColorSpace,
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.8;
     document.body.appendChild(renderer.domElement);
     
 
 
     // Soft environment lighting
     const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-    scene.add(new THREE.AmbientLight(0xffffff, 1));
+    scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.05).texture;
+    scene.add(new THREE.AmbientLight(0xffffff, 0));
+    
+   
 
+
+
+
+    
 
     // Load model
     const loader = new GLTFLoader();
