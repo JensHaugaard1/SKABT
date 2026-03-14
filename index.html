@@ -48,6 +48,16 @@
       margin: 0;
     }
 
+    ::selection {
+      background: #fffe00;
+      color: #e42b00;
+    }
+
+    ::-moz-selection {
+      background: #fffe00;
+      color: #e42b00;
+    }
+
     .text{
       position: fixed;
       bottom: 20px;
@@ -142,7 +152,7 @@
   position: relative;
   z-index: 2;
   color: #000000;
-  transition: color 0.12s ease, mix-blend-mode 0.12s ease;
+  transition: color 0.12s ease;
 }
 
 /* filled box */
@@ -150,7 +160,7 @@
   content: "";
   position: absolute;
   inset: 1px -1.5px;
-  background: #000000;
+  background: #fffe00;
   pointer-events: none;
   z-index: 1;
 
@@ -173,8 +183,7 @@
 
 .links a:hover .link-label,
 .links a:focus-visible .link-label {
-  color: #ffffff;
-  mix-blend-mode: difference;
+  color: #e42b00;
 }
 
 @media screen and (max-width: 800px) { 
@@ -259,7 +268,7 @@
   position: relative;
   z-index: 2;
   color: #000000;
-  transition: color 0.12s ease, mix-blend-mode 0.12s ease;
+  transition: color 0.12s ease;
 }
 
 /* same hover fill effect */
@@ -267,7 +276,7 @@
   content: "";
   position: absolute;
   inset: 1px -1.5px;
-  background: #000000;
+  background: #fffe00;
   pointer-events: none;
   z-index: 1;
 
@@ -289,8 +298,7 @@
 
 .overlay-esc:hover .link-label,
 .overlay-esc:focus-visible .link-label{
-  color: #ffffff;
-  mix-blend-mode: difference;
+  color: #e42b00;
 }
 
 .stocklist-content{
