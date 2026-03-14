@@ -34,7 +34,7 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      max-width: 50ch;
+      max-width: 46ch;
       z-index: 50;
       color: #000000;
       font-size: .875rem;
@@ -166,9 +166,9 @@
      }
 
      .text {
-            font-size: 0.75rem;
-            line-height: 0.75rem;
-            max-width: 50vw;
+            font-size: 0.6rem;
+            line-height: 0.6rem;
+            max-width: 46ch;
         }
 
     canvas {
@@ -176,7 +176,18 @@
         transition: scale .25s ease-in-out;;
     }
 
-    
+    .links a::after,
+    .overlay-esc::after{
+      display: none;
+    }
+
+    .links a:hover .link-label,
+    .links a:focus-visible .link-label,
+    .overlay-esc:hover .link-label,
+    .overlay-esc:focus-visible .link-label{
+      color: #000000;
+      mix-blend-mode: normal;
+    }
     }
 
 .stocklist-overlay{
@@ -273,7 +284,7 @@
 .sticker-layer{
   position: fixed;
   inset: 0;
-  z-index: 55;
+  z-index: 49;
   pointer-events: none;
   overflow: visible;
 }
@@ -289,7 +300,11 @@
   transform-origin: center center;
 }
 
-
+.stocklist-content a,
+.stocklist-content a:visited{
+  color:#000000;
+  text-decoration:none;
+}
 
   </style>
 
@@ -331,8 +346,12 @@ Kreativitet ses som en drivkraft og et sprog, der kan udfordre normer og inspire
   <a href="#" class="overlay-esc" id="closeStocklist"><span class="link-label">ESC</span></a>
 
   <div class="stocklist-content">
-    <p>KISMET <br></br>Adelgade 16, 1304 København K</p>
-    
+   <a href="https://maps.app.goo.gl/1atLFS4GpDeisL5w8" target="_blank" rel="noopener">
+  <p>
+    KISMET <br>
+    Adelgade 16, 1304 København K
+  </p>
+</a>
   </div>
 </div>
 
@@ -357,7 +376,7 @@ Kreativitet ses som en drivkraft og et sprog, der kan udfordre normer og inspire
 
     renderer.outputColorSpace = THREE.SRGBColorSpace,
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.8;
+    renderer.toneMappingExposure = 1;
     document.body.appendChild(renderer.domElement);
     
 
@@ -365,7 +384,7 @@ Kreativitet ses som en drivkraft og et sprog, der kan udfordre normer og inspire
     // Soft environment lighting
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.05).texture;
-    scene.add(new THREE.AmbientLight(0xffffff, 0));
+    scene.add(new THREE.AmbientLight(0xffffff, 1));
     
    
 
