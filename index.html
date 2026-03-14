@@ -10,7 +10,7 @@
     html, body {
       height: 100%;
       margin: 0;
-      background: #000000;
+      background: #ffffff;
       overflow: hidden;
       font-family: "indivisible", sans-serif;
         font-weight: 400;
@@ -34,9 +34,9 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      max-width: 45ch;
+      max-width: 50ch;
       z-index: 50;
-      color: #fff;
+      color: #000000;
       font-size: .875rem;
       line-height: .875rem;
       text-align: right;
@@ -66,7 +66,7 @@
 
 .logo img,
 .logo2 img{
-  height: 18vh;     /* identical height */
+  height: 3vh;     /* identical height */
   width: auto;
   display: block;
 }
@@ -96,7 +96,7 @@
 
   .logo img,
   .logo2 img{
-    height: 8vh;   /* smaller for mobile */
+    height: 3vh;   /* smaller for mobile */
   }
 }
 
@@ -111,13 +111,20 @@
       font-size: .875rem;
     }
 
-    .links a,
+.links a,
 .links a:visited {
   position: relative;
-  color: #fff !important;
+  color: #000000 !important;
   text-decoration: none !important;
-  z-index: 0;
   display: inline-block; /* important for ::after sizing */
+  isolation: isolate;
+}
+
+.links a .link-label {
+  position: relative;
+  z-index: 2;
+  color: #000000;
+  transition: color 0.12s ease, mix-blend-mode 0.12s ease;
 }
 
 /* filled box */
@@ -125,9 +132,9 @@
   content: "";
   position: absolute;
   inset: 1px -1.5px;
-  background: #fff;
-  mix-blend-mode: difference;
+  background: #000000;
   pointer-events: none;
+  z-index: 1;
 
   opacity: 0;
   transform: scaleX(0);
@@ -146,10 +153,16 @@
   transform-origin: left;
 }
 
+.links a:hover .link-label,
+.links a:focus-visible .link-label {
+  color: #ffffff;
+  mix-blend-mode: difference;
+}
+
 @media screen and (max-width: 800px) { 
 
      .links {
-        font-size: 0.75rem;
+        font-size: .875rem;
      }
 
      .text {
@@ -169,7 +182,7 @@
 .stocklist-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.96);
+  background: rgba(255, 255, 255, 0.96);
   z-index: 100;
 
   display: flex;
@@ -200,12 +213,20 @@
 /* reuse your link styling */
 .overlay-esc,
 .overlay-esc:visited{
-  color: #fff !important;
+  color: #000000 !important;
   text-decoration: none !important;
   font-size: .875rem;
   position: relative;
   display: inline-block;
-      position: absolute !important;
+  position: absolute !important;
+  isolation: isolate;
+}
+
+.overlay-esc .link-label{
+  position: relative;
+  z-index: 2;
+  color: #000000;
+  transition: color 0.12s ease, mix-blend-mode 0.12s ease;
 }
 
 /* same hover fill effect */
@@ -213,9 +234,9 @@
   content: "";
   position: absolute;
   inset: 1px -1.5px;
-  background: #fff;
-  mix-blend-mode: difference;
+  background: #000000;
   pointer-events: none;
+  z-index: 1;
 
   opacity: 0;
   transform: scaleX(0);
@@ -233,14 +254,41 @@
   transform-origin: left;
 }
 
+.overlay-esc:hover .link-label,
+.overlay-esc:focus-visible .link-label{
+  color: #ffffff;
+  mix-blend-mode: difference;
+}
+
 .stocklist-content{
   max-width: 600px;
   padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  color: #fff;
+  color: #000000;
 }
+
+
+.sticker-layer{
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.sticker{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: center center;
+}
+
 
 
   </style>
@@ -266,28 +314,25 @@
 
   <div class="text">
 <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at neque velit. Fusce magna felis, faucibus auctor quam ac, egestas iaculis ipsum. Vivamus consectetur tempus lacus sed 
+    Convo er et magasin, der hylder unges kreativitet på tværs af brancher.
+Vi giver unge en scene til at dele deres rejse, erfaringer og kreative håndværk.
+Kreativitet ses som en drivkraft og et sprog, der kan udfordre normer og inspirere andre.
 </p>
 
   </div>
 
   <nav class="links">
-    <a href="#" id="openStocklist">STOCKLIST</a>
-    <a href="#">OM</a>
+    <a href="#" id="openStocklist"><span class="link-label">STOCKLIST</span></a>
+   
   </nav>
 
   <div class="stocklist-overlay" id="stocklistOverlay" aria-hidden="true">
-  
-  <a href="#" class="overlay-esc" id="closeStocklist">ESC</a>
+
+  <a href="#" class="overlay-esc" id="closeStocklist"><span class="link-label">ESC</span></a>
 
   <div class="stocklist-content">
-    <p>Lorem ipsum dolor sit amet</p>
-    <p>Consectetur adipiscing elit</p>
-    <p>Vivamus luctus urna sed urna</p>
-    <p>Ultricies ac tempor dui sagittis</p>
-    <p>In condimentum facilisis porta</p>
-    <p>Sed nec diam eu diam mattis viverra</p>
-    <p>Nulla fringilla, orci ac euismod semper</p>
+    <p>KISMET <br></br>Adelgade 16, 1304 København K</p>
+    
   </div>
 </div>
 
@@ -455,6 +500,62 @@ addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeOverlay();
 });
 
+const stickerSources = [
+  "./sticker-1.png",
+  "./sticker-2.png",
+  "./sticker-3.png",
+  "./sticker-4.png"
+];
+
+
+const stickerLayer = document.createElement("div");
+stickerLayer.className = "sticker-layer";
+document.body.appendChild(stickerLayer);
+
+const stickers = [];
+const MAX_STICKERS = 3;
+
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function addSticker(x, y) {
+  const img = document.createElement("img");
+  img.className = "sticker";
+  img.src = stickerSources[Math.floor(Math.random() * stickerSources.length)];
+  img.alt = "";
+  img.draggable = false;
+
+  const isMobile = window.innerWidth <= 800;
+  const sizeMultiplier = isMobile ? 1.5 : 1;
+  const sizeVw = rand(25, 35) * sizeMultiplier;
+  const rotation = rand(-45, 45);
+
+  img.style.width = `${sizeVw}vw`;
+
+  stickerLayer.appendChild(img);
+
+  img.onload = () => {
+    const rect = img.getBoundingClientRect();
+
+    const finalX = x - rect.width / 2;
+    const finalY = y - rect.height / 2;
+
+    img.style.transform = `translate3d(${finalX}px, ${finalY}px, 0) rotate(${rotation}deg)`;
+  };
+
+  stickers.push(img);
+
+  if (stickers.length > MAX_STICKERS) {
+    const oldest = stickers.shift();
+    if (oldest) oldest.remove();
+  }
+}
+
+document.body.addEventListener("click", (e) => {
+  if (e.target.closest("a, button")) return;
+  addSticker(e.clientX, e.clientY);
+});
   </script>
 </body>
 </html>
